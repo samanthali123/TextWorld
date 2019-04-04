@@ -2,9 +2,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Chicken implements Creature {
-    private Level.Room currentRoom;
-    String name;
+public class Chicken extends Creature {
+
 
     public Chicken(Level.Room startRoom) {
         this.currentRoom = startRoom;
@@ -15,6 +14,7 @@ public class Chicken implements Creature {
     public void move(Level.Room playerRoom) {
         HashMap<String, Level.Room> availRooms = currentRoom.getNeighbors();
         ArrayList<Level.Room> rooms = new ArrayList<>(availRooms.values());
+        currentRoom.removeCreature(name);
         currentRoom = rooms.get((int)(Math.random()*rooms.size()));
     }
 

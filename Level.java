@@ -32,9 +32,9 @@ public class Level {
         return nodes.get(name);
     }
 
-    public void destroyRoom (String name) {
+    public void destroyRoom(String name) {
         nodes.remove(name);
-        for (String s: nodes.keySet()) {
+        for (String s : nodes.keySet()) {
             if (nodes.get(s).getNeighbor(s).equals(name)) {
                 nodes.get(s).removeNeighbor(name);
             }
@@ -105,6 +105,13 @@ public class Level {
             return neighbors.get(name);
         }
 
+        public Room getRandomNeighbor(){
+            ArrayList<Level.Room> rooms = new ArrayList<>(neighbors.values());
+            int num = (int)(Math.random()*rooms.size());
+            Room next = rooms.get(num);
+            return next;
+        }
+
         public void removeNeighbor(String name) {
             neighbors.remove(name);
         }
@@ -134,6 +141,33 @@ public class Level {
 
         public ArrayList<Creature> getCreatures() {
             return creatures;
+        }
+
+
+        public Creature removeCreature(String name) {
+            for (Creature c :
+                    creatures) {
+                if (c.getName().equals(name)) {
+                    creatures.remove(c);
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public String getCreaturesNames() {
+            int chickenCount = 0;
+            int wumpusCount = 0;
+
+            String out = "";
+
+            for (Creature c : creatures) {
+                if (c.getName().equals("chicken")) chickenCount++;
+                else if (c.getName().equals("wumpus")) wumpusCount++;
+            }
+
+            out = chickenCount + " chickens and " + wumpusCount + " wumpi";
+            return out;
         }
     }
 }

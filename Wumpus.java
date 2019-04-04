@@ -1,20 +1,32 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Wumpus implements Creature {
-    private Level.Room currentRoom;
+public class Wumpus extends Creature {
 
+    public Wumpus(Level.Room startRoom) {
+        this.currentRoom = startRoom;
+        name = "wumpus";
+    }
     @Override
     public void move(Level.Room playerRoom) {
-        HashMap<String, Level.Room> availRooms = currentRoom.getNeighbors();
-        ArrayList<Level.Room> rooms = new ArrayList<>(availRooms.values());
-        if (!rooms.get((int)(Math.random()*rooms.size())).equals(playerRoom)) {
-            currentRoom = rooms.get((int)(Math.random()*rooms.size()));
+        Level.Room randomNeighbor = playerRoom.getRandomNeighbor();
+        if (!randomNeighbor.equals(playerRoom)) {
+            currentRoom.removeCreature(name);
+            currentRoom = randomNeighbor;
+        }
+    }
+
+    public void hunt(String response) {
+        if (response.equals("yes")) {
+            System.out.println("YOU HAVE SLAYED ME! I AM NOW DEAD -" + name);
+            currentRoom.removeCreature(name);
+        } else {
+            System.out.println("thank you for not killing me");
         }
     }
 
     @Override
     public void interact() {
-
+        System.out.println("wump, wump. Don't hunt me, please!");
     }
 }

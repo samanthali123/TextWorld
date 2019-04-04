@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -22,8 +24,15 @@ public class Main {
         l.getRoom("closet").addItem(new Item("pants", "so your legs don't get cold"));
         l.getRoom("closet").addItem(new Item("fanny pack", "to store small things on your adventure"));
 
+
+        ArrayList<Creature> creatures = new ArrayList<>();
         Creature c = new Chicken(l.getRoom("hall"));
         l.getRoom("hall").addCreature(c);
+        creatures.add(c);
+
+        Creature w = new Wumpus(l.getRoom("closet"));
+        l.getRoom("closet").addCreature(w);
+        creatures.add(w);
 
         String answer = JOptionPane.showInputDialog("Please enter your name and a description of yourself (\"name, description\")");
 
@@ -59,9 +68,18 @@ public class Main {
                     p.setCurrentRoom(l.getRoom(response.substring(index1 + 1, index2)));
                 else System.out.println("That is not a valid room, please pick another room.");
 
-                c.move();
-                if (((Chicken) c).getCurrentRoom().equals(p.getCurrentRoom())) {
-                    c.interact();
+                for (Creature creature : creatures) {
+                    if ((creature).getCurrentRoom().equals(p.getCurrentRoom())) {
+                        creature.move(p.getCurrentRoom());
+                        c.interact();
+                    }
+
+                    if (creature.getName().equals("wumpus")) {
+                        System.out.println("Do you want to hunt this wumpus");
+                        response = in.nextLine();
+                        Wumpus wump = (Wumpus)w;
+                        wump.hunt(response);
+                    }
                 }
 
             } else if (response.substring(0, 4).equals("look")) {
@@ -69,7 +87,7 @@ public class Main {
                 else System.out.println("This rooom has no items");
 
             } else if (response.substring(0, 4).equals("peek")) {
-                System.out.println("These are the creatures in your current room: " + p.getCurrentRoom().getCreatures().toString());
+                System.out.println("These are the creatures in your current room: " + p.getCurrentRoom().getCreaturesNames());
 
             }else if (response.substring(0, 8).equals("add room")) {
                 int index1 = response.indexOf("<");
