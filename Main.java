@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    static Player p;
     public static void main(String[] args) {
         Level l = new Level();
 
@@ -37,7 +38,7 @@ public class Main {
         String answer = JOptionPane.showInputDialog("Please enter your name and a description of yourself (\"name, description\")");
 
         int comma = answer.indexOf(",");
-        Player p = new Player(answer.substring(0, comma), answer.substring(comma + 1));
+        p = new Player(answer.substring(0, comma), answer.substring(comma + 1));
 
         p.setCurrentRoom(l.getRoom("hall"));
 
@@ -107,28 +108,32 @@ public class Main {
                 int index1 = response.indexOf("<");
                 int index2 = response.indexOf(">");
 
-                if (index1 != -1 && index2 != -1 && p.getCurrentRoom().getItems().contains(response.substring(index1 + 1, index2))) {
-                    p.addItem(p.getCurrentRoom().removeItem(response.substring(index1 + 1, index2)));
-                    System.out.println("You just grabbed the " + response.substring(index1 + 1, index2));
-                } else {
-                    System.out.println("That item does not exist, please choose another");
+                boolean contains = false;
+                if (index1 != -1 && index2 != -1) {
+                    for (int i = 0; i < p.getCurrentRoom().getItems().size(); i++) {
+                        if (p.getCurrentRoom().getItems().get(i).getName().equals(response.substring(index1 + 1, index2)))
+                            contains = true;
+                    }
+                    if (contains) {
+                        p.addItem(p.getCurrentRoom().removeItem(response.substring(index1 + 1, index2)));
+                        System.out.println("You just grabbed the " + response.substring(index1 + 1, index2));
+                    } else System.out.println("That item does not exist, please choose another");
                 }
 
             } else if (response.substring(0, 4).equals("drop")) {
                 int index1 = response.indexOf("<");
                 int index2 = response.indexOf(">");
 
-                if (index1 != -1 && index2 != -1 && p.getItems().contains(response.substring(index1 + 1, index2))) {
-                    Item i = new Item(null, null);
-
-                    for (Item item : p.getItems()) {
-                        if (item.getName().equals(response.substring(index1 + 1, index2))) {
-                            i = item;
-                            p.getCurrentRoom().addItem(p.removeItem(item));
+                if (index1 != -1 && index2 != -1) {
+                    boolean contains = false;
+                    for (int j = 0; j < p.getItems().size(); j++) {
+                        if (p.getItems().get(j).getName().equals(response.substring(index1 + 1, index2))) {
+                            contains = true;
+                            p.getCurrentRoom().addItem(p.removeItem(p.getItems().get(j)));
                         }
                     }
 
-                    if (!i.getName().equals(null)) System.out.println("You just dropped the " + response.substring(index1 + 1, index2));
+                    if (contains) System.out.println("You just dropped the " + response.substring(index1 + 1, index2));
                     else System.out.println("You don't have this item");
 
                 }

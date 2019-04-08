@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Level {
+    Player p = Main.p;
     private HashMap<String, Room> nodes;
 
     public Level() {
@@ -43,6 +44,10 @@ public class Level {
                 nodes.remove(s);
             }
         }
+    }
+
+    public Player getPlayer() {
+        return p;
     }
 
     public static class Room {

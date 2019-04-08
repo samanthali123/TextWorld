@@ -21,7 +21,7 @@ public class Wumpus extends Creature {
             System.out.println("YOU HAVE SLAYED ME! I AM NOW DEAD -" + name);
             currentRoom.removeCreature(name);
         } else {
-            System.out.println("thank you for not killing me");
+            System.out.println("thank you for not killing me -" + name);
         }
     }
 

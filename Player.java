@@ -34,4 +34,10 @@ public class Player {
     public void setCurrentRoom(Level.Room newRoom) {
         currentRoom = newRoom;
     }
+
+    public boolean takeItem() {
+        for (int i = 0; i < currentRoom.getItems().size(); i++) {
+            if (currentRoom.getItems().get(i).getName().equals())
+        }
+    }
 }
