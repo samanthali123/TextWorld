@@ -50,6 +50,15 @@ public class Level {
         return p;
     }
 
+    public boolean addRoom(String roomName) {
+        for (String key : nodes.keySet()) {
+            if (nodes.get(key).getName().equals(roomName)) return false;
+        }
+
+        addRoom(roomName);
+        return true;
+    }
+
     public static class Room {
         private String name;
         private String description;
