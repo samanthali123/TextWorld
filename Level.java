@@ -3,16 +3,55 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Level {
-    Player p = Main.p;
+    public static Player p = Main.p;
     private HashMap<String, Room> nodes;
+    public static ArrayList<Creature> creatures;
 
     public Level() {
         nodes = new HashMap<>();
+        addRoom("hall", "long narrow hallway");
+        addRoom("closet", "small room for storing clothes");
+        addRoom("dungeon", "dark musty dungeon home to a dragon");
+        addRoom("stable", "home for horses");
+
+        addDirectedEdge("hall", "dungeon");
+        addUndirectedEdge("hall", "closet");
+        addUndirectedEdge("closet", "stable");
+        addDirectedEdge("stable", "dungeon");
+        addUndirectedEdge("dungeon", "closet");
+
+        getRoom("hall").addItem(new Item("frame", "to decorate your pictures"));
+        getRoom("hall").addItem(new Item("flowers", "pretty and fragrant"));
+        getRoom("dungeon").addItem(new Item("knife", "to defend yourself against the dragon"));
+        getRoom("closet").addItem(new Item("pants", "so your legs don't get cold"));
+        getRoom("closet").addItem(new Item("fanny pack", "to store small things on your adventure"));
+
+
+        creatures = new ArrayList<>();
+        Creature c = new Chicken(getRoom("hall"));
+        getRoom("hall").addCreature(c);
+        creatures.add(c);
+
+        Creature w = new Wumpus(getRoom("closet"));
+        getRoom("closet").addCreature(w);
+        creatures.add(w);
+
+        Creature s = new Popstar(getRoom("dungeon"));
+        getRoom("dungeon").addCreature(s);
+        creatures.add(s);
     }
 
     public void addRoom(String name, String desc) {
         Room n = new Room(name, desc);
         nodes.put(name, n);
+    }
+
+    public boolean addNewRoom(String roomName, String roomDescription) {
+        for (String key : nodes.keySet()) {
+            if (nodes.get(key).getName().equals(roomName)) return false;
+        }
+        addRoom(roomName, roomDescription);
+        return true;
     }
 
     public void addDirectedEdge(String name1, String name2) {
@@ -50,14 +89,7 @@ public class Level {
         return p;
     }
 
-    public boolean addRoom(String roomName) {
-        for (String key : nodes.keySet()) {
-            if (nodes.get(key).getName().equals(roomName)) return false;
-        }
 
-        addRoom(roomName);
-        return true;
-    }
 
     public static class Room {
         private String name;
@@ -182,6 +214,13 @@ public class Level {
 
             out = chickenCount + " chickens and " + wumpusCount + " wumpi";
             return out;
+        }
+
+        public boolean hasNeighbor(Room playerRoom) {
+            for (String key : neighbors.keySet()) {
+                if (neighbors.get(key).equals(playerRoom)) return true;
+            }
+            return false;
         }
     }
 }

@@ -35,7 +35,9 @@ public class AddRoom implements Command {
 
     @Override
     public boolean execute() {
-        boolean success = level.addRoom(roomName);
+        boolean success = level.addNewRoom(roomName, roomDescription);
+        if (success) System.out.println(roomName + ", " + roomDescription + " just added!");
+        else System.out.println("the room you want to add could not be added :(");
         return success;
     }
 }

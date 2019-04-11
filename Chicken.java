@@ -11,11 +11,12 @@ public class Chicken extends Creature {
     }
 
     @Override
-    public void move(Level.Room playerRoom) {
+    public boolean move(Level.Room playerRoom) {
         HashMap<String, Level.Room> availRooms = currentRoom.getNeighbors();
         ArrayList<Level.Room> rooms = new ArrayList<>(availRooms.values());
         currentRoom.removeCreature(name);
         currentRoom = rooms.get((int)(Math.random()*rooms.size()));
+        return true;
     }
 
     @Override

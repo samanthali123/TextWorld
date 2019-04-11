@@ -1,7 +1,7 @@
 public class LookCommand implements Command {
     Level level;
     Level.Room room;
-    Player p = level.getPlayer();
+
 
     public LookCommand (Level level) {
         this.level = level;
@@ -9,6 +9,7 @@ public class LookCommand implements Command {
 
     @Override
     public void init(String username) {
+        Player p = level.getPlayer();
         room = p.getCurrentRoom();
     }
 

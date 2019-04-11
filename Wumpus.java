@@ -8,12 +8,14 @@ public class Wumpus extends Creature {
         name = "wumpus";
     }
     @Override
-    public void move(Level.Room playerRoom) {
+    public boolean move(Level.Room playerRoom) {
         Level.Room randomNeighbor = playerRoom.getRandomNeighbor();
         if (!randomNeighbor.equals(playerRoom)) {
             currentRoom.removeCreature(name);
             currentRoom = randomNeighbor;
+            return true;
         }
+        return false;
     }
 
     public void hunt(String response) {

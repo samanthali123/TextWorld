@@ -1,0 +1,76 @@
+if (response.substring(0, 2).equals("go")) {
+                int index1 = response.indexOf("<");
+                int index2 = response.indexOf(">");
+
+                if (l.getRoom(response.substring(index1 + 1, index2)) != null)
+                    p.setCurrentRoom(l.getRoom(response.substring(index1 + 1, index2)));
+                else System.out.println("That is not a valid room, please pick another room.");
+
+                for (Creature creature : creatures) {
+                    if ((creature).getCurrentRoom().equals(p.getCurrentRoom())) {
+                        creature.move(p.getCurrentRoom());
+                        c.interact();
+                    }
+
+                    if (creature.getName().equals("wumpus")) {
+                        System.out.println("Do you want to hunt this wumpus");
+                        response = in.nextLine();
+                        Wumpus wump = (Wumpus)w;
+                        wump.hunt(response);
+                    }
+                }
+
+            } else if (response.substring(0, 4).equals("look")) {
+                if (p.getCurrentRoom().getItems() != null) System.out.println("avaliable items: " + p.getCurrentRoom().getItems().toString());
+                else System.out.println("This rooom has no items");
+
+            } else if (response.substring(0, 4).equals("peek")) {
+                System.out.println("These are the creatures in your current room: " + p.getCurrentRoom().getCreaturesNames());
+
+            }else if (response.substring(0, 8).equals("add room")) {
+                int index1 = response.indexOf("<");
+                int index2 = response.indexOf(">");
+
+                int index3 = response.indexOf("(");
+                int index4 = response.indexOf(")");
+
+                if (index1 != -1 && index2 != -1 && index3 != -1 && index4 != -1) {
+                    Level.Room newRoom = new Level.Room(response.substring(index1 + 1, index2), response.substring(index3 + 1, index4));
+                    l.addRoom(newRoom.getName(), newRoom.getDescription());
+                    l.addDirectedEdge(p.getCurrentRoom().getName(), newRoom.getName());
+                    System.out.println("New room just added!");
+                }
+
+            } else if (response.substring(0, 4).equals("take")) {
+                int index1 = response.indexOf("<");
+                int index2 = response.indexOf(">");
+
+                boolean contains = false;
+                if (index1 != -1 && index2 != -1) {
+                    for (int i = 0; i < p.getCurrentRoom().getItems().size(); i++) {
+                        if (p.getCurrentRoom().getItems().get(i).getName().equals(response.substring(index1 + 1, index2)))
+                            contains = true;
+                    }
+                    if (contains) {
+                        p.addItem(p.getCurrentRoom().removeItem(response.substring(index1 + 1, index2)));
+                        System.out.println("You just grabbed the " + response.substring(index1 + 1, index2));
+                    } else System.out.println("That item does not exist, please choose another");
+                }
+
+            } else if (response.substring(0, 4).equals("drop")) {
+                int index1 = response.indexOf("<");
+                int index2 = response.indexOf(">");
+
+                if (index1 != -1 && index2 != -1) {
+                    boolean contains = false;
+                    for (int j = 0; j < p.getItems().size(); j++) {
+                        if (p.getItems().get(j).getName().equals(response.substring(index1 + 1, index2))) {
+                            contains = true;
+                            p.getCurrentRoom().addItem(p.removeItem(p.getItems().get(j)));
+                        }
+                    }
+
+                    if (contains) System.out.println("You just dropped the " + response.substring(index1 + 1, index2));
+                    else System.out.println("You don't have this item");
+
+                }
