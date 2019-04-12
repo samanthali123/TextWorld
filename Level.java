@@ -1,33 +1,43 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class Level {
-    public static Player p = Main.p;
+    //public static Player p = Main.getPlayer();
     private HashMap<String, Room> nodes;
     public static ArrayList<Creature> creatures;
+
 
     public Level() {
         nodes = new HashMap<>();
         addRoom("hall", "long narrow hallway");
         addRoom("closet", "small room for storing clothes");
-        addRoom("dungeon", "dark musty dungeon home to a dragon");
+        addRoom("dungeon", "dark musty home of a dragon");
         addRoom("stable", "home for horses");
+        addRoom("bathroom", "for you to do your business");
 
         addDirectedEdge("hall", "dungeon");
         addUndirectedEdge("hall", "closet");
+        addUndirectedEdge("bathroom", "closet");
+        addDirectedEdge("stable", "dungeon");
         addUndirectedEdge("closet", "stable");
         addDirectedEdge("stable", "dungeon");
         addUndirectedEdge("dungeon", "closet");
+        addDirectedEdge("bathroom", "stable");
+        addUndirectedEdge("bathroom", "hall");
 
         getRoom("hall").addItem(new Item("frame", "to decorate your pictures"));
         getRoom("hall").addItem(new Item("flowers", "pretty and fragrant"));
         getRoom("dungeon").addItem(new Item("knife", "to defend yourself against the dragon"));
         getRoom("closet").addItem(new Item("pants", "so your legs don't get cold"));
         getRoom("closet").addItem(new Item("fanny pack", "to store small things on your adventure"));
+        getRoom("bathroom").addItem(new Item("shampoo", "to wash your hair with"));
+        getRoom("stable").addItem(new Item("horse", " a great pet!"));
 
 
         creatures = new ArrayList<>();
+
         Creature c = new Chicken(getRoom("hall"));
         getRoom("hall").addCreature(c);
         creatures.add(c);
@@ -39,6 +49,7 @@ public class Level {
         Creature s = new Popstar(getRoom("dungeon"));
         getRoom("dungeon").addCreature(s);
         creatures.add(s);
+
     }
 
     public void addRoom(String name, String desc) {
@@ -46,12 +57,17 @@ public class Level {
         nodes.put(name, n);
     }
 
-    public boolean addNewRoom(String roomName, String roomDescription) {
+    public boolean addNewRoom(String roomName, String roomDescription, Level.Room playerRoom) {
         for (String key : nodes.keySet()) {
             if (nodes.get(key).getName().equals(roomName)) return false;
         }
-        addRoom(roomName, roomDescription);
-        return true;
+
+        if (roomName != null && roomDescription != null) {
+            addRoom(roomName, roomDescription);
+            addUndirectedEdge(roomName, playerRoom.getName());
+            return true;
+        }
+        return false;
     }
 
     public void addDirectedEdge(String name1, String name2) {
@@ -85,9 +101,9 @@ public class Level {
         }
     }
 
-    public Player getPlayer() {
-        return p;
-    }
+//    public Player getPlayer() {
+//        return p;
+//    }
 
 
 
@@ -201,26 +217,56 @@ public class Level {
             return null;
         }
 
-        public String getCreaturesNames() {
-            int chickenCount = 0;
-            int wumpusCount = 0;
 
-            String out = "";
-
-            for (Creature c : creatures) {
-                if (c.getName().equals("chicken")) chickenCount++;
-                else if (c.getName().equals("wumpus")) wumpusCount++;
-            }
-
-            out = chickenCount + " chickens and " + wumpusCount + " wumpi";
-            return out;
-        }
 
         public boolean hasNeighbor(Room playerRoom) {
             for (String key : neighbors.keySet()) {
                 if (neighbors.get(key).equals(playerRoom)) return true;
             }
             return false;
+        }
+
+        public String getCreaturesNames(Room playerRoom) {
+            String out = "";
+            int chickenCount = 0;
+            int wumpusCount = 0;
+            int popstarCount = 0;
+
+            for (int i = 0; i < creatures.size(); i++) {
+
+                if (creatures.get(i).getName().equals("wumpus")) {
+                    wumpusCount++;
+                    creatures.get(i).interact();
+                }
+                if (creatures.get(i).getName().equals("chicken")) {
+                    chickenCount++;
+                    creatures.get(i).interact();
+                }
+
+                if (creatures.get(i).getName().equals("popstar")) {
+                    popstarCount++;
+                    creatures.get(i).interact();
+                }
+
+                if (creatures.get(i).getCurrentRoom().equals(playerRoom) && this.creatures.get(i).getName().equals("wumpus") && creatures.get(i).getName().equals("wumpus")) {
+                    System.out.println("Would you like to hunt this wumpus");
+                    Scanner scanner = new Scanner(System.in);
+                    String response = scanner.nextLine();
+                    ((Wumpus) creatures.get(i)).hunt(response, creatures);
+                }
+
+                if (creatures.get(i).getCurrentRoom().equals(playerRoom) && this.creatures.get(i).getName().equals("chicken") && creatures.get(i).getName().equals("chicken")) {
+                    System.out.println("Would you like to eat this chicken");
+                    Scanner scanner = new Scanner(System.in);
+                    String response = scanner.nextLine();
+                    ((Chicken) creatures.get(i)).eat(response, creatures);
+
+                }
+
+            }
+
+            out = chickenCount + " chickens, " + wumpusCount + " wumpi, and " + popstarCount + " popstars";
+            return out;
         }
     }
 }

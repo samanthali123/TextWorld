@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
-    static Player p;
-    static Level l = new Level();
-    static HashMap<String, Command> commands = new HashMap<>();
+    private static Level l = new Level();
+    private static HashMap<String, Command> commands = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -16,7 +15,7 @@ public class Main {
         String answer = JOptionPane.showInputDialog("Please enter your name and a description of yourself (\"name, description\")");
 
         int comma = answer.indexOf(",");
-        p = new Player(answer.substring(0, comma), answer.substring(comma + 1));
+        Player p = new Player(answer.substring(0, comma), answer.substring(comma + 1));
 
         p.setCurrentRoom(l.getRoom("hall"));
 
@@ -27,8 +26,9 @@ public class Main {
                 answer.substring(0, comma) + ", you can choose to:" +
                         "\ngo to another room (type \"go <roomname>\")" +
                         "\nview the items in the room you are currently in (type \"look\")" +
-                        "\nview the creatuers in the room you are currently in (type \"peek\")" +
-                        "\nadd a room (type \"add room <roomname> (description)\")" +
+                        "\nview the creatures in the room you are currently in (type \"peek\")" +
+                        "\nview the items you are carrying (type \"view\")" +
+                        "\nadd a room (type \"add-room <roomname> (description)\")" +
                         "\npick up an item (type \"take <itemname>\")" +
                         "\ndrop an item (type \"drop <itemname>\")" +
                         "\nor quit (type quit)"
@@ -40,14 +40,15 @@ public class Main {
             response = in.nextLine();
 
             Command command = lookUpCommand(response);
-            command.execute();
+            command.execute(p);
 
-        } while (Player.isPlaying);
+        } while (p.isPlaying);
     }
 
     private static void initCommands() {
         commands.put("take", new TakeCommand(l));
         commands.put("peek", new PeekCommand(l));
+        commands.put("view", new ViewCommand(l));
         commands.put("go", new GoCommand(l));
         commands.put("add-room", new AddRoom(l));
         commands.put("drop", new DropCommand(l));
@@ -70,4 +71,5 @@ public class Main {
         String[] words = response.split(" ");
         return words[0];
     }
+
 }

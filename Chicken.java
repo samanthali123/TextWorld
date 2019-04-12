@@ -21,12 +21,17 @@ public class Chicken extends Creature {
 
     @Override
     public void interact() {
-        //Talk to chicken
-        System.out.println("BOK! BOK! FEED ME! PLEASE DON'T EAT ME!");
-        //name chicken
-        //set name to whateve is typed in
-        //follow chicken
-        //move chicken and display room that yours is in
+        System.out.println("chicken: 'BOK! BOK! FEED ME! PLEASE DON'T EAT ME!'");
+    }
+
+    public void eat(String response, ArrayList<Creature> creatures) {
+        if (response.equals("yes")) {
+            System.out.println("I hope I was tasty because now I am dead -" + name);
+            currentRoom.removeCreature(name);
+            creatures.remove(name);
+            this.creatures.remove(name);
+        }
+        else System.out.println("Thank you for not eating me!!! -" + name);
     }
 
     public Level.Room getCurrentRoom() {

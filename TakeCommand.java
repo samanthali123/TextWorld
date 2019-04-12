@@ -21,8 +21,8 @@ public class TakeCommand implements Command {
 
 
     @Override
-    public boolean execute() {
-        Player p = level.getPlayer();
+    public boolean execute(Player p) {
+        //Player p = level.getPlayer();
         boolean success = p.takeItem(itemName);
         if (success) System.out.println("You just grabbed the " + itemName);
         else System.out.println("That item does not exist, please choose another");

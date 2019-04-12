@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public abstract class Creature {
     protected String name;
     protected Level.Room currentRoom;
-    protected Level l = Main.l;
+    //protected Level l = Main.l;
     protected ArrayList<Creature> creatures = Level.creatures;
 
     public abstract boolean move(Level.Room playerRoom);

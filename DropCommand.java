@@ -21,8 +21,7 @@ public class DropCommand implements Command {
     }
 
     @Override
-    public boolean execute() {
-        Player p = level.getPlayer();
+    public boolean execute(Player p) {
         boolean success = p.dropItem(itemName);
 
         if (success) System.out.println("You just dropped the " + itemName);

@@ -9,13 +9,12 @@ public class LookCommand implements Command {
 
     @Override
     public void init(String username) {
-        Player p = level.getPlayer();
-        room = p.getCurrentRoom();
     }
 
     @Override
-    public boolean execute() {
-        if (room.getItems() != null) System.out.println(room.getItems().toString());
+    public boolean execute(Player p) {
+        room = p.getCurrentRoom();
+        if (room.getItems() != null) System.out.println("These are the items in your current room: " + room.getItems().toString());
         return false;
     }
 }

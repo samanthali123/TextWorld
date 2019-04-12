@@ -7,7 +7,7 @@ public class QuitCommand implements Command {
     }
 
     @Override
-    public boolean execute() {
+    public boolean execute(Player p) {
         if (username.equals("quit")) {
             System.out.println("See you soon!");
             Player.isPlaying = false;

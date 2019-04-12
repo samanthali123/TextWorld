@@ -8,20 +8,24 @@ public class Wumpus extends Creature {
         name = "wumpus";
     }
     @Override
-    public boolean move(Level.Room playerRoom) {
-        Level.Room randomNeighbor = playerRoom.getRandomNeighbor();
-        if (!randomNeighbor.equals(playerRoom)) {
-            currentRoom.removeCreature(name);
-            currentRoom = randomNeighbor;
-            return true;
+    public boolean move(Level.Room moveRoom) {
+        for (String key : moveRoom.getNeighbors().keySet()) {
+            Level.Room neighbor = moveRoom.getNeighbors().get(key);
+            if (!neighbor.equals(moveRoom)) {
+                currentRoom.removeCreature(name);
+                currentRoom = neighbor;
+                return true;
+            }
         }
         return false;
     }
 
-    public void hunt(String response) {
+    public void hunt(String response, ArrayList<Creature> creatures) {
         if (response.equals("yes")) {
             System.out.println("YOU HAVE SLAYED ME! I AM NOW DEAD -" + name);
             currentRoom.removeCreature(name);
+            creatures.remove(name);
+            this.creatures.remove(name);
         } else {
             System.out.println("thank you for not killing me -" + name);
         }
@@ -29,6 +33,6 @@ public class Wumpus extends Creature {
 
     @Override
     public void interact() {
-        System.out.println("wump, wump. Don't hunt me, please!");
+        System.out.println("wumpus: 'wump, wump. Don't hunt me, please!'");
     }
 }

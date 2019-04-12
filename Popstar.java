@@ -6,14 +6,14 @@ public class Popstar extends Creature {
     }
 
     @Override
-    public boolean move(Level.Room playerRoom) {
-        if (currentRoom.hasNeighbor(playerRoom)) {
-            currentRoom = playerRoom;
+    public boolean move(Level.Room moveRoom) {
+        if (currentRoom.hasNeighbor(moveRoom)) {
+            currentRoom = moveRoom;
             return true;
         } else {
-            for (String key : playerRoom.getNeighbors().keySet()) {
-                if (playerRoom.getNeighbors().get(key).equals(currentRoom.getNeighbor(key)))
-                    currentRoom = playerRoom.getNeighbor(key);
+            for (String key : moveRoom.getNeighbors().keySet()) {
+                if (moveRoom.getNeighbors().get(key).equals(currentRoom.getNeighbor(key)))
+                    currentRoom = moveRoom.getNeighbor(key);
             }
         }
         return false;
@@ -21,6 +21,6 @@ public class Popstar extends Creature {
 
         @Override
         public void interact () {
-            System.out.println("Howdy! Would you like to get my autograph???");
+            System.out.println("popstar: 'Howdy! Would you like to get my autograph??? Please get my autograph!!! :))'");
         }
     }

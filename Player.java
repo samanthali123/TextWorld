@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Player extends Creature {
     private String name;
@@ -51,8 +52,8 @@ public class Player extends Creature {
     public boolean dropItem(String itemName) {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getName().equals(itemName)) {
-                items.remove(items.get(i));
                 currentRoom.addItem(items.get(i));
+                items.remove(items.get(i));
                 return true;
             }
         }
@@ -63,7 +64,22 @@ public class Player extends Creature {
     public boolean move(Level.Room playerRoom) {
 
         for (Creature c : creatures) {
-            c.move(currentRoom);
+
+            c.move(playerRoom);
+//            if (c.getCurrentRoom().equals(playerRoom) && c.getName().equals("wumpus")) {
+//                //c = (Wumpus)c;
+//                System.out.println("Would you like to hunt this wumpus");
+//                Scanner scanner = new Scanner(System.in);
+//                String response = scanner.nextLine();
+//                ((Wumpus) c).hunt(response);
+//            }
+//
+//            if (c.getCurrentRoom().equals(playerRoom) && c.getName().equals("chicken")) {
+//                System.out.println("Would you like to eat this chicken");
+//                Scanner scanner = new Scanner(System.in);
+//                String response = scanner.nextLine();
+//                ((Chicken) c).eat(response);
+//            }
         }
 
         for (String key : currentRoom.getNeighbors().keySet()) {
@@ -78,6 +94,29 @@ public class Player extends Creature {
 
     @Override
     public void interact() {
-
+        interact(currentRoom, creatures);
     }
+
+    public void interact(Level.Room playerRoom, ArrayList<Creature> creatures) {
+
+        for (int i = 0; i < creatures.size(); i++) {
+            //if (creatures.get(i).getCurrentRoom().equals(playerRoom)) creatures.get(i).interact();
+
+            if (creatures.get(i).getCurrentRoom().equals(playerRoom) && this.creatures.get(i).getName().equals("wumpus") && creatures.get(i).getName().equals("wumpus")) {
+                System.out.println("Would you like to hunt this wumpus");
+                Scanner scanner = new Scanner(System.in);
+                String response = scanner.nextLine();
+                ((Wumpus) creatures.get(i)).hunt(response, creatures);
+            }
+
+            if (creatures.get(i).getCurrentRoom().equals(playerRoom) && this.creatures.get(i).getName().equals("chicken") && creatures.get(i).getName().equals("chicken")) {
+                System.out.println("Would you like to eat this chicken");
+                Scanner scanner = new Scanner(System.in);
+                String response = scanner.nextLine();
+                ((Chicken) creatures.get(i)).eat(response, creatures);
+
+            }
+        }
+    }
+
 }

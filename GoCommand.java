@@ -21,11 +21,10 @@ public class GoCommand implements Command {
     }
 
     @Override
-    public boolean execute() {
-        Player p = level.getPlayer();
+    public boolean execute(Player p) {
         Level.Room room = level.getRoom(roomName);
         if (p.move(room)) System.out.println("You just moved to the " + roomName);
-        else System.out.println("That room does not exist, please choose another");
+        else System.out.println("That room is not available, please choose another");
         return false;
     }
 }
