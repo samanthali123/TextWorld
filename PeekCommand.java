@@ -15,7 +15,7 @@ public class PeekCommand implements Command {
     @Override
     public boolean execute(Player p) {
         System.out.println("These are the creatures in your current room: " + p.getCurrentRoom().getCreaturesNames(p.getCurrentRoom()));
-        Level.Room.creatureInteract(p.getCurrentRoom());
+        //Level.Room.creatureInteract(p.getCurrentRoom());
         return true;
     }
 
